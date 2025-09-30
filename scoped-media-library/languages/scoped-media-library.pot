@@ -1,0 +1,215 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the Scoped Media Library package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Scoped Media Library 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-01 12:00+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: includes/class-sml-admin.php:25
+#: includes/class-sml-admin.php:26
+msgid "Scoped Media Library"
+msgstr ""
+
+#: includes/class-sml-admin.php:40
+msgid "General Settings"
+msgstr ""
+
+#: includes/class-sml-admin.php:47
+msgid "Dimension Rules"
+msgstr ""
+
+#: includes/class-sml-admin.php:54
+msgid "Advanced Settings"
+msgstr ""
+
+#: includes/class-sml-admin.php:66
+msgid "Enable Filtering"
+msgstr ""
+
+#: includes/class-sml-admin.php:71
+msgid "Enable dimension-based filtering in media library"
+msgstr ""
+
+#: includes/class-sml-admin.php:76
+msgid "Minimum Width (px)"
+msgstr ""
+
+#: includes/class-sml-admin.php:81
+msgid "Minimum image width in pixels"
+msgstr ""
+
+#: includes/class-sml-admin.php:86
+msgid "Maximum Width (px)"
+msgstr ""
+
+#: includes/class-sml-admin.php:91
+msgid "Maximum image width in pixels"
+msgstr ""
+
+#: includes/class-sml-admin.php:96
+msgid "Minimum Height (px)"
+msgstr ""
+
+#: includes/class-sml-admin.php:101
+msgid "Minimum image height in pixels"
+msgstr ""
+
+#: includes/class-sml-admin.php:106
+msgid "Maximum Height (px)"
+msgstr ""
+
+#: includes/class-sml-admin.php:111
+msgid "Maximum image height in pixels"
+msgstr ""
+
+#: includes/class-sml-admin.php:116
+msgid "Enable Fallback Mode"
+msgstr ""
+
+#: includes/class-sml-admin.php:121
+msgid "Show all images alongside scoped results"
+msgstr ""
+
+#: includes/class-sml-admin.php:126
+msgid "Admin Only Fallback"
+msgstr ""
+
+#: includes/class-sml-admin.php:131
+msgid "Only show fallback mode to administrators"
+msgstr ""
+
+#: includes/class-sml-admin.php:136
+msgid "Sync Existing Images"
+msgstr ""
+
+#: includes/class-sml-admin.php:141
+msgid "Sync dimension metadata for existing images"
+msgstr ""
+
+#: includes/class-sml-admin.php:148
+msgid "Configure basic settings for the Scoped Media Library plugin."
+msgstr ""
+
+#: includes/class-sml-admin.php:152
+msgid "Set the dimension rules for filtering images in the media library."
+msgstr ""
+
+#: includes/class-sml-admin.php:156
+msgid "Advanced settings and maintenance options."
+msgstr ""
+
+#: includes/class-sml-admin.php:176
+msgid "Sync Now"
+msgstr ""
+
+#: includes/class-sml-admin.php:190
+msgid "Minimum width cannot be greater than maximum width."
+msgstr ""
+
+#: includes/class-sml-admin.php:195
+msgid "Minimum height cannot be greater than maximum height."
+msgstr ""
+
+#: includes/class-sml-admin.php:210
+msgid "Filter Images by Dimensions"
+msgstr ""
+
+#: includes/class-sml-admin.php:211
+msgid "Control which images appear in the WordPress media library selector by defining dimension rules. Perfect for ACF, Beaver Builder, and other plugins that require specific image sizes."
+msgstr ""
+
+#: includes/class-sml-admin.php:220
+msgid "Usage Examples"
+msgstr ""
+
+#: includes/class-sml-admin.php:222
+msgid "Icons:"
+msgstr ""
+
+#: includes/class-sml-admin.php:222
+msgid "Set 100-200px width/height for icon selection"
+msgstr ""
+
+#: includes/class-sml-admin.php:223
+msgid "Banners:"
+msgstr ""
+
+#: includes/class-sml-admin.php:223
+msgid "Set minimum 1920px width for banner images"
+msgstr ""
+
+#: includes/class-sml-admin.php:224
+msgid "Thumbnails:"
+msgstr ""
+
+#: includes/class-sml-admin.php:224
+msgid "Set 150-300px dimensions for thumbnail images"
+msgstr ""
+
+#: includes/class-sml-admin.php:227
+msgid "Compatibility"
+msgstr ""
+
+#: includes/class-sml-admin.php:228
+msgid "This plugin works with ACF image fields, Beaver Builder, Elementor, and any other plugin that uses the WordPress media modal."
+msgstr ""
+
+#: includes/class-sml-admin.php:252
+msgid "Syncing..."
+msgstr ""
+
+#: includes/class-sml-admin.php:253
+msgid "Sync complete!"
+msgstr ""
+
+#: includes/class-sml-admin.php:254
+msgid "Sync failed. Please try again."
+msgstr ""
+
+#: includes/class-sml-admin.php:261
+msgid "Settings"
+msgstr ""
+
+#: includes/class-sml-media-filter.php:158
+msgid "Access denied."
+msgstr ""
+
+#: includes/class-sml-media-filter.php:180
+msgid "Showing all images"
+msgstr ""
+
+#: includes/class-sml-media-filter.php:181
+msgid "Showing scoped images only"
+msgstr ""
+
+#: includes/class-sml-metadata-sync.php:162
+msgid "Synced %d images. %d failed. %d remaining."
+msgstr ""
+
+#: assets/js/media.js:45
+msgid "Scoped Mode"
+msgstr ""
+
+#: assets/js/media.js:46
+msgid "All Images"
+msgstr ""
+
+#: assets/js/media.js:47
+msgid "Toggle View"
+msgstr ""
+
+#: assets/js/media.js:48
+msgid "Showing images: %dx%d to %dx%d pixels"
+msgstr ""
