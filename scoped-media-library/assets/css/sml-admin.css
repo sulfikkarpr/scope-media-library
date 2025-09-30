@@ -1,0 +1,181 @@
+/**
+ * Scoped Media Library - Admin Styles
+ * 
+ * @package    Scoped_Media_Library
+ * @subpackage Scoped_Media_Library/assets/css
+ */
+
+/* Settings Page Styles */
+.sml-settings-header {
+    background: #fff;
+    border-left: 4px solid #2271b1;
+    padding: 12px 20px;
+    margin: 20px 0;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+}
+
+.sml-settings-header p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.sml-sync-section {
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+}
+
+.sml-sync-section h2 {
+    margin-top: 0;
+    font-size: 18px;
+}
+
+#sml-sync-dimensions {
+    margin-top: 10px;
+}
+
+#sml-sync-result {
+    padding: 10px 15px;
+    border-radius: 4px;
+    display: none;
+}
+
+#sml-sync-result.success {
+    display: block;
+    background: #d7f5d7;
+    border-left: 4px solid #46b450;
+    color: #1e4620;
+}
+
+#sml-sync-result.error {
+    display: block;
+    background: #f8d7da;
+    border-left: 4px solid #d63638;
+    color: #8a1f11;
+}
+
+#sml-sync-result.info {
+    display: block;
+    background: #e5f5fa;
+    border-left: 4px solid #2271b1;
+    color: #1d4ed8;
+}
+
+/* Settings Form Styles */
+.form-table th {
+    width: 220px;
+}
+
+.form-table input[type="number"].small-text {
+    width: 100px;
+}
+
+.form-table p.description {
+    margin-top: 5px;
+    color: #646970;
+    font-style: italic;
+}
+
+.form-table fieldset label {
+    font-weight: normal;
+}
+
+/* Media Library Column Styles */
+.column-sml_dimensions {
+    width: 120px;
+}
+
+/* Media Modal Enhancements */
+.attachments-browser .media-toolbar {
+    position: relative;
+}
+
+.sml-filter-notice {
+    background: #e5f5fa;
+    border-left: 4px solid #2271b1;
+    padding: 8px 12px;
+    margin: 10px 0;
+    font-size: 13px;
+}
+
+.sml-filter-notice .dashicons {
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+.sml-filter-notice strong {
+    font-weight: 600;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 782px) {
+    .form-table th {
+        width: auto;
+        padding-bottom: 0;
+    }
+    
+    .form-table input[type="number"].small-text {
+        width: 100%;
+        max-width: 100px;
+    }
+}
+
+/* WordPress Core Compatibility */
+.wrap h1 {
+    margin-bottom: 15px;
+}
+
+.wrap form {
+    margin-top: 20px;
+}
+
+/* Loading Spinner */
+.sml-sync-section .spinner {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.sml-sync-section .spinner.is-active {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Button Styles */
+#sml-sync-dimensions:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Settings Sections */
+.form-table tbody tr:first-child th,
+.form-table tbody tr:first-child td {
+    padding-top: 0;
+}
+
+h2.title {
+    margin-top: 30px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/* Icon Styles for Better UX */
+.sml-icon-info {
+    color: #2271b1;
+}
+
+.sml-icon-success {
+    color: #46b450;
+}
+
+.sml-icon-error {
+    color: #d63638;
+}
+
+.sml-icon-warning {
+    color: #dba617;
+}
