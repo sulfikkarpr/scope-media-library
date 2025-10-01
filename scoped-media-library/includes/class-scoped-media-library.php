@@ -78,7 +78,7 @@ class Scoped_Media_Library {
 
 		return array(
 			'min_width' => $normalize_int( $merged['min_width'] ),
-			'max_width' => $normalize_int( $merged['max_width'] ] ),
+			'max_width' => $normalize_int( $merged['max_width'] ),
 			'min_height' => $normalize_int( $merged['min_height'] ),
 			'max_height' => $normalize_int( $merged['max_height'] ),
 			'fallback_enabled' => ! empty( $merged['fallback_enabled'] ),
@@ -213,11 +213,20 @@ class Scoped_Media_Library {
 			if ( empty( $args['meta_query'] ) ) {
 				$args['meta_query'] = $meta_query;
 			} else {
-				$args['meta_query'] = array(
-					'relation' => 'AND',
-					$meta_query,
-					$args['meta_query'],
-				);
+				$combined = array( 'relation' => 'AND' );
+				foreach ( $meta_query as $key => $clause ) {
+					if ( 'relation' === $key ) {
+						continue;
+					}
+					$combined[] = $clause;
+				}
+				foreach ( $args['meta_query'] as $key => $clause ) {
+					if ( 'relation' === $key ) {
+						continue;
+					}
+					$combined[] = $clause;
+				}
+				$args['meta_query'] = $combined;
 			}
 			$args['post_mime_type'] = 'image';
 		}
@@ -254,11 +263,20 @@ class Scoped_Media_Library {
 			if ( empty( $existing_meta ) ) {
 				$query->set( 'meta_query', $meta_query );
 			} else {
-				$query->set( 'meta_query', array(
-					'relation' => 'AND',
-					$meta_query,
-					$existing_meta,
-				) );
+				$combined = array( 'relation' => 'AND' );
+				foreach ( $meta_query as $key => $clause ) {
+					if ( 'relation' === $key ) {
+						continue;
+					}
+					$combined[] = $clause;
+				}
+				foreach ( $existing_meta as $key => $clause ) {
+					if ( 'relation' === $key ) {
+						continue;
+					}
+					$combined[] = $clause;
+				}
+				$query->set( 'meta_query', $combined );
 			}
 			$query->set( 'post_mime_type', 'image' );
 		}
