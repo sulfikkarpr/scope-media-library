@@ -24,6 +24,9 @@ class SML_Integration_ACF {
 		add_filter( 'acf/fields/image/query', array( $this, 'acf_field_query' ), 20, 3 );
 		add_filter( 'acf/fields/gallery/query', array( $this, 'acf_field_query' ), 20, 3 );
 
+		// As a safety net, scope the core WP_Query for attachments in ACF modal
+		add_action( 'pre_get_posts', array( $this, 'maybe_scope_pre_get_posts' ), 20 );
+
 		// Validate selected image on save against field rules
 		add_filter( 'acf/validate_value/type=image', array( $this, 'validate_field_value' ), 20, 4 );
 		add_filter( 'acf/validate_value/type=gallery', array( $this, 'validate_gallery_value' ), 20, 4 );
@@ -154,6 +157,67 @@ class SML_Integration_ACF {
 		}
 
 		return $args;
+	}
+
+	/**
+	 * Scope the core WP_Query for attachments during ACF media modal AJAX.
+	 */
+	public function maybe_scope_pre_get_posts( $query ) {
+		if ( ! is_admin() || ! $query->is_main_query() ) {
+			return;
+		}
+		if ( function_exists( 'wp_doing_ajax' ) && ! wp_doing_ajax() ) {
+			return;
+		}
+		$action = isset( $_REQUEST['action'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['action'] ) ) : '';
+		if ( 'query-attachments' !== $action ) {
+			return;
+		}
+
+		// Attempt to detect ACF field key
+		$field_key = '';
+		if ( isset( $_POST['query']['acf_field_key'] ) ) {
+			$field_key = sanitize_text_field( wp_unslash( $_POST['query']['acf_field_key'] ) );
+		} elseif ( isset( $_POST['query']['field_key'] ) ) {
+			$field_key = sanitize_text_field( wp_unslash( $_POST['query']['field_key'] ) );
+		}
+		if ( ! $field_key ) {
+			return;
+		}
+
+		$field = function_exists( 'acf_get_field' ) ? acf_get_field( $field_key ) : null;
+		if ( ! $field && function_exists( 'get_field_object' ) ) {
+			$field = get_field_object( $field_key );
+		}
+		if ( ! $field ) {
+			return;
+		}
+
+		$rules = $this->extract_rules_from_field( $field );
+		if ( ! $rules ) {
+			return;
+		}
+
+		$meta_query = $this->build_meta_query_from_rules( $rules );
+		if ( count( $meta_query ) > 1 ) {
+			$existing = $query->get( 'meta_query' );
+			if ( empty( $existing ) ) {
+				$query->set( 'meta_query', $meta_query );
+			} else {
+				$combined = array( 'relation' => 'AND' );
+				foreach ( $meta_query as $key => $clause ) {
+					if ( 'relation' === $key ) { continue; }
+					$combined[] = $clause;
+				}
+				foreach ( $existing as $key => $clause ) {
+					if ( 'relation' === $key ) { continue; }
+					$combined[] = $clause;
+				}
+				$query->set( 'meta_query', $combined );
+			}
+			$query->set( 'post_type', 'attachment' );
+			$query->set( 'post_mime_type', 'image' );
+		}
 	}
 
 	/**
