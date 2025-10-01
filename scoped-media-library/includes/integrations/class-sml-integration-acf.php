@@ -89,16 +89,26 @@ class SML_Integration_ACF {
 	 * Filter media query when ACF opens the modal for a specific field with rules.
 	 */
 	public function filter_acf_media_query( $args ) {
-		if ( empty( $_POST['query'] ) || empty( $_POST['query']['_acfuploader'] ) ) {
+		if ( empty( $_POST['query'] ) ) {
 			return $args;
 		}
 
-		$field_key = isset( $_POST['query']['acf_field_key'] ) ? sanitize_text_field( wp_unslash( $_POST['query']['acf_field_key'] ) ) : '';
+		// Detect ACF field key robustly
+		$field_key = '';
+		if ( isset( $_POST['query']['acf_field_key'] ) ) {
+			$field_key = sanitize_text_field( wp_unslash( $_POST['query']['acf_field_key'] ) );
+		} elseif ( isset( $_POST['query']['field_key'] ) ) {
+			$field_key = sanitize_text_field( wp_unslash( $_POST['query']['field_key'] ) );
+		}
 		if ( ! $field_key ) {
 			return $args;
 		}
 
 		$field = function_exists( 'acf_get_field' ) ? acf_get_field( $field_key ) : null;
+		// Fallback: try locating by key via ACF get_field_object if needed
+		if ( ! $field && function_exists( 'get_field_object' ) ) {
+			$field = get_field_object( $field_key );
+		}
 		if ( ! $field || empty( $field['sml_enable'] ) ) {
 			return $args;
 		}
@@ -133,6 +143,9 @@ class SML_Integration_ACF {
 			);
 		}
 		if ( count( $meta_query ) > 1 ) {
+			// Ensure attachments post type & image mime type
+			$args['post_mime_type'] = 'image';
+			$args['post_type'] = 'attachment';
 			if ( empty( $args['meta_query'] ) ) {
 				$args['meta_query'] = $meta_query;
 			} else {
@@ -147,7 +160,6 @@ class SML_Integration_ACF {
 				}
 				$args['meta_query'] = $combined;
 			}
-			$args['post_mime_type'] = 'image';
 		}
 
 		return $args;
