@@ -26,21 +26,19 @@ if ( ! defined( 'SML_PLUGIN_URL' ) ) {
 }
 
 require_once SML_PLUGIN_DIR . 'includes/class-scoped-media-library.php';
-// Optional integrations
+// Integrations
 require_once SML_PLUGIN_DIR . 'includes/integrations/class-sml-integration-acf.php';
+require_once SML_PLUGIN_DIR . 'includes/integrations/class-sml-integration-beaver.php';
 
 add_action( 'plugins_loaded', function() {
 	\Scoped_Media_Library::instance();
 	\SML_Integration_ACF::maybe_boot();
+	\SML_Integration_Beaver::maybe_boot();
 } );
 
 register_activation_hook( __FILE__, function() {
 	// Placeholder for future activation routines (e.g., backfill tasks).
 } );
 
-add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), function( $links ) {
-	$settings_url = admin_url( 'options-general.php?page=scoped-media-library' );
-	array_unshift( $links, '<a href="' . esc_url( $settings_url ) . '">' . esc_html__( 'Settings', 'scoped-media-library' ) . '</a>' );
-	return $links;
-} );
+// No global settings screen; configuration is per-field via integrations.
 

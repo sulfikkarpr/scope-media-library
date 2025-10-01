@@ -110,10 +110,45 @@ class SML_Integration_ACF {
 			'max_height' => isset( $field['sml_max_height'] ) && '' !== $field['sml_max_height'] ? (int) $field['sml_max_height'] : null,
 		);
 
-		// Inject context-aware rules so core class can apply them.
-		add_filter( 'scoped_media_library/get_dimension_rules', function( $global_rules, $context_args ) use ( $rules ) {
-			return wp_parse_args( array_filter( $rules, function( $v ) { return null !== $v; } ), $global_rules );
-		}, 10, 2 );
+		// Apply meta_query directly for ACF context
+		$meta_query = array( 'relation' => 'AND' );
+		if ( null !== $rules['min_width'] ) {
+			$meta_query[] = array(
+				'key' => '_sml_width', 'value' => (int) $rules['min_width'], 'compare' => '>=', 'type' => 'NUMERIC',
+			);
+		}
+		if ( null !== $rules['max_width'] ) {
+			$meta_query[] = array(
+				'key' => '_sml_width', 'value' => (int) $rules['max_width'], 'compare' => '<=', 'type' => 'NUMERIC',
+			);
+		}
+		if ( null !== $rules['min_height'] ) {
+			$meta_query[] = array(
+				'key' => '_sml_height', 'value' => (int) $rules['min_height'], 'compare' => '>=', 'type' => 'NUMERIC',
+			);
+		}
+		if ( null !== $rules['max_height'] ) {
+			$meta_query[] = array(
+				'key' => '_sml_height', 'value' => (int) $rules['max_height'], 'compare' => '<=', 'type' => 'NUMERIC',
+			);
+		}
+		if ( count( $meta_query ) > 1 ) {
+			if ( empty( $args['meta_query'] ) ) {
+				$args['meta_query'] = $meta_query;
+			} else {
+				$combined = array( 'relation' => 'AND' );
+				foreach ( $meta_query as $key => $clause ) {
+					if ( 'relation' === $key ) continue;
+					$combined[] = $clause;
+				}
+				foreach ( $args['meta_query'] as $key => $clause ) {
+					if ( 'relation' === $key ) continue;
+					$combined[] = $clause;
+				}
+				$args['meta_query'] = $combined;
+			}
+			$args['post_mime_type'] = 'image';
+		}
 
 		return $args;
 	}
