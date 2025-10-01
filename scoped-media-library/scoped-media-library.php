@@ -29,6 +29,7 @@ require_once SML_PLUGIN_DIR . 'includes/class-scoped-media-library.php';
 // Integrations
 require_once SML_PLUGIN_DIR . 'includes/integrations/class-sml-integration-acf.php';
 require_once SML_PLUGIN_DIR . 'includes/integrations/class-sml-integration-beaver.php';
+require_once SML_PLUGIN_DIR . 'includes/integrations/beaver-default-rules.php';
 
 add_action( 'plugins_loaded', function() {
 	\Scoped_Media_Library::instance();
