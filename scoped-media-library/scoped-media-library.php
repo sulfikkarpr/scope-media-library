@@ -26,9 +26,12 @@ if ( ! defined( 'SML_PLUGIN_URL' ) ) {
 }
 
 require_once SML_PLUGIN_DIR . 'includes/class-scoped-media-library.php';
+// Optional integrations
+require_once SML_PLUGIN_DIR . 'includes/integrations/class-sml-integration-acf.php';
 
 add_action( 'plugins_loaded', function() {
 	\Scoped_Media_Library::instance();
+	\SML_Integration_ACF::maybe_boot();
 } );
 
 register_activation_hook( __FILE__, function() {
