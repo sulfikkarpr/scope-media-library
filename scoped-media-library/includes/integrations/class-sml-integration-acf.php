@@ -17,8 +17,12 @@ class SML_Integration_ACF {
 		add_action( 'acf/render_field_settings/type=image', array( $this, 'add_field_settings' ) );
 		add_action( 'acf/render_field_settings/type=gallery', array( $this, 'add_field_settings' ) );
 
-		// Filter media modal for ACF context based on field settings
+		// Filter media modal for ACF context based on field settings (generic AJAX)
 		add_filter( 'ajax_query_attachments_args', array( $this, 'filter_acf_media_query' ), 20 );
+
+		// Prefer ACF-provided field-specific query filters for reliability
+		add_filter( 'acf/fields/image/query', array( $this, 'acf_field_query' ), 20, 3 );
+		add_filter( 'acf/fields/gallery/query', array( $this, 'acf_field_query' ), 20, 3 );
 
 		// Validate selected image on save against field rules
 		add_filter( 'acf/validate_value/type=image', array( $this, 'validate_field_value' ), 20, 4 );
@@ -83,6 +87,75 @@ class SML_Integration_ACF {
 				'value' => 1,
 			),
 		) );
+	}
+
+	/**
+	 * Apply scoping using ACF field-specific query filters.
+	 *
+	 * @param array $args
+	 * @param array $field
+	 * @param mixed $post_id
+	 * @return array
+	 */
+	public function acf_field_query( $args, $field, $post_id ) {
+		if ( empty( $field['sml_enable'] ) ) {
+			return $args;
+		}
+
+		$rules = array(
+			'min_width' => isset( $field['sml_min_width'] ) && '' !== $field['sml_min_width'] ? (int) $field['sml_min_width'] : null,
+			'max_width' => isset( $field['sml_max_width'] ) && '' !== $field['sml_max_width'] ? (int) $field['sml_max_width'] : null,
+			'min_height' => isset( $field['sml_min_height'] ) && '' !== $field['sml_min_height'] ? (int) $field['sml_min_height'] : null,
+			'max_height' => isset( $field['sml_max_height'] ) && '' !== $field['sml_max_height'] ? (int) $field['sml_max_height'] : null,
+		);
+
+		$meta_query = $this->build_meta_query_from_rules( $rules );
+		if ( count( $meta_query ) > 1 ) {
+			$args['post_type'] = 'attachment';
+			$args['post_mime_type'] = 'image';
+			$args['meta_query'] = $this->merge_meta_queries( $args, $meta_query );
+		}
+
+		return $args;
+	}
+
+	/**
+	 * Build meta_query from rules
+	 */
+	protected function build_meta_query_from_rules( $rules ) {
+		$meta_query = array( 'relation' => 'AND' );
+		if ( isset( $rules['min_width'] ) && null !== $rules['min_width'] ) {
+			$meta_query[] = array('key' => '_sml_width','value' => (int)$rules['min_width'],'compare' => '>=','type' => 'NUMERIC');
+		}
+		if ( isset( $rules['max_width'] ) && null !== $rules['max_width'] ) {
+			$meta_query[] = array('key' => '_sml_width','value' => (int)$rules['max_width'],'compare' => '<=','type' => 'NUMERIC');
+		}
+		if ( isset( $rules['min_height'] ) && null !== $rules['min_height'] ) {
+			$meta_query[] = array('key' => '_sml_height','value' => (int)$rules['min_height'],'compare' => '>=','type' => 'NUMERIC');
+		}
+		if ( isset( $rules['max_height'] ) && null !== $rules['max_height'] ) {
+			$meta_query[] = array('key' => '_sml_height','value' => (int)$rules['max_height'],'compare' => '<=','type' => 'NUMERIC');
+		}
+		return $meta_query;
+	}
+
+	/**
+	 * Merge existing and new meta queries with AND relation
+	 */
+	protected function merge_meta_queries( $args, $new_meta_query ) {
+		if ( empty( $args['meta_query'] ) ) {
+			return $new_meta_query;
+		}
+		$combined = array( 'relation' => 'AND' );
+		foreach ( $new_meta_query as $key => $clause ) {
+			if ( 'relation' === $key ) continue;
+			$combined[] = $clause;
+		}
+		foreach ( $args['meta_query'] as $key => $clause ) {
+			if ( 'relation' === $key ) continue;
+			$combined[] = $clause;
+		}
+		return $combined;
 	}
 
 	/**
